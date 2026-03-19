@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кейстік Тапсырмалар — Экономиканы Мемлекеттік Реттеу</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080C14;
+    --surface: #0F1825;
+    --card: #141F30;
+    --border: #1E3050;
+    --accent: #00C9FF;
+    --accent2: #00E5A0;
+    --accent3: #FF6B6B;
+    --accent4: #FFB347;
+    --accent5: #B388FF;
+    --accent6: #FF80AB;
+    --text: #E8F0FE;
+    --muted: #6B85A8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Manrope', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(0,201,255,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(0,229,160,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(179,136,255,0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .header-badge {
+    display: inline-block;
+    background: rgba(0,201,255,0.1);
+    border: 1px solid rgba(0,201,255,0.3);
+    color: var(--accent);
+    font-family: 'Unbounded', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    padding: 8px 20px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(24px, 4vw, 42px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    font-weight: 500;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Rules bar */
+  .rules-bar {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+  }
+
+  .rule-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .rule-chip .icon { font-size: 16px; }
+
+  /* Grid */
+  .cases-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  @media (max-width: 768px) {
+    .cases-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .cases-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Case Card */
+  .case-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 24px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+
+  .case-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--case-color, #00C9FF) 0%, transparent 60%);
+    opacity: 0.05;
+    transition: opacity 0.3s;
+  }
+
+  .case-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--case-color, #00C9FF);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 1px var(--case-color, #00C9FF);
+  }
+
+  .case-card:hover::before { opacity: 0.1; }
+
+  .case-card.done {
+    opacity: 0.5;
+    cursor: default;
+  }
+  .case-card.done:hover {
+    transform: none;
+  }
+
+  .case-num {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--case-color, #00C9FF);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .case-icon {
+    font-size: 40px;
+    margin-bottom: 16px;
+    display: block;
+    filter: drop-shadow(0 0 12px var(--case-color, #00C9FF));
+  }
+
+  .case-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  .case-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .case-tag {
+    display: inline-block;
+    margin-top: 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .done-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--accent2);
+    color: #000;
+    border-radius: 100px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    display: none;
+  }
+  .case-card.done .done-badge { display: block; }
+
+  /* Modal overlay */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 760px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(30px) scale(0.97);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+  }
+
+  .modal-overlay.active .modal {
+    transform: translateY(0) scale(1);
+  }
+
+  .modal-header {
+    padding: 28px 28px 0;
+    position: relative;
+  }
+
+  .modal-case-label {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--modal-color, #00C9FF);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .modal-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(16px, 2.5vw, 22px);
+    font-weight: 800;
+    line-height: 1.3;
+    margin-bottom: 20px;
+    padding-right: 48px;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+  /* Timer bar */
+  .timer-section {
+    padding: 0 28px;
+    margin-bottom: 4px;
+  }
+
+  .timers-row {
+    display: flex;
+    gap: 12px;
+  }
+
+  .timer-box {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .timer-box.think { border-color: var(--accent4); }
+  .timer-box.answer { border-color: var(--accent2); }
+  .timer-box.active { box-shadow: 0 0 20px rgba(0,0,0,0.3); }
+
+  .timer-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .timer-display {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 2px;
+  }
+
+  .timer-box.think .timer-display { color: var(--accent4); }
+  .timer-box.answer .timer-display { color: var(--accent2); }
+
+  .timer-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    transition: width 1s linear, background 0.5s;
+    border-radius: 0 0 14px 14px;
+  }
+
+  .timer-box.think .timer-progress { background: var(--accent4); }
+  .timer-box.answer .timer-progress { background: var(--accent2); }
+
+  .timer-status {
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 4px;
+    min-height: 16px;
+  }
+
+  .timer-box.think .timer-status { color: var(--accent4); }
+  .timer-box.answer .timer-status { color: var(--accent2); }
+
+  /* Timer controls */
+  .timer-controls {
+    display: flex;
+    gap: 10px;
+    padding: 12px 28px;
+    margin-bottom: 4px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .btn-think {
+    background: rgba(255,179,71,0.15);
+    border: 1px solid rgba(255,179,71,0.4);
+    color: var(--accent4);
+  }
+  .btn-think:hover { background: rgba(255,179,71,0.25); }
+
+  .btn-answer {
+    background: rgba(0,229,160,0.15);
+    border: 1px solid rgba(0,229,160,0.4);
+    color: var(--accent2);
+  }
+  .btn-answer:hover { background: rgba(0,229,160,0.25); }
+
+  .btn-reset {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    flex: 0 0 auto;
+    padding: 10px 14px;
+  }
+  .btn-reset:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+  /* Scenario */
+  .scenario-block {
+    margin: 0 28px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--modal-color, #00C9FF);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 18px;
+  }
+
+  .scenario-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--modal-color, #00C9FF);
+    margin-bottom: 8px;
+  }
+
+  .scenario-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  /* Questions */
+  .questions-section {
+    padding: 0 28px;
+    margin-bottom: 8px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .question-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    align-items: flex-start;
+  }
+
+  .q-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--modal-color, #00C9FF);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .q-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* Hint section */
+  .hint-section {
+    padding: 0 28px 28px;
+  }
+
+  .hint-toggle {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: var(--muted);
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s;
+    text-align: left;
+  }
+
+  .hint-toggle:hover {
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+  }
+
+  .hint-arrow {
+    font-size: 16px;
+    transition: transform 0.3s;
+  }
+
+  .hint-content {
+    display: none;
+    margin-top: 12px;
+    background: rgba(255,179,71,0.06);
+    border: 1px solid rgba(255,179,71,0.2);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+
+  .hint-content.open { display: block; }
+  .hint-toggle.open .hint-arrow { transform: rotate(180deg); }
+
+  .hint-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text);
+    align-items: flex-start;
+  }
+
+  .hint-item:last-child { margin-bottom: 0; }
+
+  .hint-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent4);
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  .done-btn {
+    width: 100%;
+    margin: 0 0 4px;
+    padding: 14px;
+    background: linear-gradient(135deg, rgba(0,229,160,0.2), rgba(0,201,255,0.2));
+    border: 1px solid rgba(0,229,160,0.4);
+    border-radius: 12px;
+    color: var(--accent2);
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .done-btn:hover { background: linear-gradient(135deg, rgba(0,229,160,0.3), rgba(0,201,255,0.3)); }
+
+  /* Progress */
+  .progress-bar-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .progress-label {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 6px;
+    background: var(--card);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 100px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  .progress-count {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--accent2);
+    white-space: nowrap;
+  }
+
+  /* Alert styles */
+  .time-warning { animation: pulse-warn 1s ease infinite; }
+  @keyframes pulse-warn {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  /* Answer section */
+  .answer-toggle {
+    width: 100%;
+    background: rgba(179,136,255,0.07);
+    border: 1px solid rgba(179,136,255,0.25);
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: var(--accent5);
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s;
+    text-align: left;
+    margin-bottom: 0;
+  }
+  .answer-toggle:hover { background: rgba(179,136,255,0.14); }
+  .answer-arrow { font-size: 16px; transition: transform 0.3s; }
+  .answer-toggle.open .answer-arrow { transform: rotate(180deg); }
+
+  .answer-content {
+    display: none;
+    margin-top: 12px;
+    background: rgba(179,136,255,0.05);
+    border: 1px solid rgba(179,136,255,0.2);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 12px;
+  }
+  .answer-content.open { display: block; }
+
+  .answer-item {
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(179,136,255,0.12);
+  }
+  .answer-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+
+  .answer-q-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent5);
+    margin-bottom: 6px;
+  }
+
+  .answer-q-text {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .answer-text {
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="header-badge">Экономиканы Мемлекеттік Реттеу</div>
+    <h1>Кейстік Тапсырмалар</h1>
+    <p class="subtitle">Топтарға бөлініп, кейсті таңдаңыздар. Ойлануға 4 минут, жауап беруге 5 минут берілді.</p>
+  </header>
+
+  <div class="rules-bar">
+    <div class="rule-chip"><span class="icon">👥</span> Топ кейс таңдайды</div>
+    <div class="rule-chip"><span class="icon">🧠</span> 4 мин ойлану</div>
+    <div class="rule-chip"><span class="icon">🗣</span> 5 мин жауап</div>
+    <div class="rule-chip"><span class="icon">💡</span> Подсказка бар</div>
+  </div>
+
+  <div class="cases-grid" id="casesGrid"></div>
+
+  <div class="progress-bar-wrap">
+    <span class="progress-label">Прогресс</span>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <span class="progress-count" id="progressCount">0 / 6</span>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-case-label" id="modalLabel"></div>
+      <div class="modal-title" id="modalTitle"></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <div class="timer-section">
+      <div class="timers-row">
+        <div class="timer-box think" id="thinkBox">
+          <div class="timer-label">🧠 Ойлану</div>
+          <div class="timer-display" id="thinkDisplay">4:00</div>
+          <div class="timer-status" id="thinkStatus"></div>
+          <div class="timer-progress" id="thinkProgress" style="width:100%"></div>
+        </div>
+        <div class="timer-box answer" id="answerBox">
+          <div class="timer-label">🗣 Жауап беру</div>
+          <div class="timer-display" id="answerDisplay">5:00</div>
+          <div class="timer-status" id="answerStatus"></div>
+          <div class="timer-progress" id="answerProgress" style="width:100%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timer-controls">
+      <button class="btn btn-think" onclick="startThink()">▶ Ойлануды бастау</button>
+      <button class="btn btn-answer" onclick="startAnswer()">▶ Жауапты бастау</button>
+      <button class="btn btn-reset" onclick="resetTimers()" title="Таймерді қайта бастау">↺</button>
+    </div>
+
+    <div class="scenario-block">
+      <div class="scenario-label">📋 Жағдай</div>
+      <div class="scenario-text" id="modalScenario"></div>
+    </div>
+
+    <div class="questions-section">
+      <div class="section-label">❓ Талқылау сұрақтары</div>
+      <div id="modalQuestions"></div>
+    </div>
+
+    <div class="hint-section">
+      <button class="hint-toggle" id="hintToggle" onclick="toggleHint()">
+        <span>💡 Подсказка (жауап нұсқаулары)</span>
+        <span class="hint-arrow">▼</span>
+      </button>
+      <div class="hint-content" id="hintContent">
+        <div id="hintItems"></div>
+      </div>
+      <br>
+      <button class="answer-toggle" id="answerToggle" onclick="toggleAnswer()">
+        <span>📝 Модель жауап (оқытушыға арналған)</span>
+        <span class="answer-arrow">▼</span>
+      </button>
+      <div class="answer-content" id="answerContent">
+        <div id="answerItems"></div>
+      </div>
+      <br>
+      <button class="done-btn" onclick="markDone()">✓ Кейс аяқталды</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const COLORS = ['#00C9FF','#00E5A0','#FF6B6B','#FFB347','#B388FF','#FF80AB'];
+
+const caseAnswers = [
+  [
+    'Аймақ басшысының тезисі қате. Нарық механизмі мемлекеттік қызметтерді (мектеп, жол, әлеуметтік төлемдер) өздігінен реттей алмайды — олар қоғамдық игілік. Жоспарлаудың рөлі: мақсаттарды ғылыми негіздеу, ресурстарды тиімді бөлу, нәтижені алдын-ала анықтау. Жоспарсыз бюджет тиімсіз жұмсалады.',
+    'Бұл жағдайда директивті жоспарлау керек еді — мектеп, жол, зейнетақы мемлекеттің заңды міндеттемесі, орындамауға болмайды. Индикативті жоспарлау жеке секторға ұсыным береді. Мемлекеттік бюджет шығыстары үшін директивті (міндетті) жоспар талап етіледі.',
+    'Ағымдағы жоспарлау — жылдық, республикалық бюджет негізінде. Стратегиялық жоспарлау — ұзақ мерзімді (5–20 жыл), даму бағыттарын белгілейді. Аймаққа екеуі де қажет: стратегиялық — ұзақ мерзімді даму бағытын анықтауға, ағымдағы — жыл сайынғы бюджетті дұрыс жоспарлауға.',
+    'Жоспарсыздықтың салдары: 1) Мектеп, жол, медицина — халыққа қызмет нашарлайды. 2) Ресурстар ысырапталады. 3) Инвесторлар келмейді — болашақ белгісіз аймаққа ешкім ақша салмайды. 4) Халықтың наразылығы өседі. 5) Экономикалық артта қалушылық тереңдейді.'
+  ],
+  [
+    'Жағдайда бюрократияның ұйымдастырушылық себебі анық: 12 құжат, артық рәсімдер, 3 ай күту, мөрдің орны — формализмнің шегі. Ең басты себеп — ұйымдастырушылық: процедуралар негізсіз күрделендірілген, нақты нәтижеге емес, формаға бағытталған.',
+    '"Таныс арқылы шешу" — бұл фаворитизм (жеке таныстықты пайдалану). Туыс болса — непотизм, ру-жерлесі болса — трайбализм. Бұл жерде фаворитизм: жүйе заң арқылы емес, жеке қарым-қатынас арқылы жұмыс істейді деген хабар берілді.',
+    'E-gov жүйесі: 1) Өтініштер онлайн берілсе — шенеунікпен тікелей байланыс болмайды. 2) Құжаттар тізімі стандартталып, мерзімде жауап беріледі. 3) Өтініш статусы онлайн бақыланады. 4) Автоматты жүйе мөрдің орнына қарамайды — мазмұнға қарайды. Нәтиже: адам факторы азаяды, мөлдірлік артады.',
+    'Бюрократияны толықтай жою мүмкін емес — ол мемлекеттік аппараттың табиғи бөлігі. Азайту жолдары: 1) Цифрландыру (e-gov). 2) Регуляторлық реформа — артық талаптарды жою. 3) Кадр саясаты — кәсіби шенеуніктер даярлау. 4) Азаматтық бақылау — журналистика, қоғамдық ұйымдар.'
+  ],
+  [
+    'Жағдайда үш форма: 1) Непотизм — тендерді әкімнің немере ағасының компаниясы жеңді. 2) Трайбализм — прокурор сол ауданда туып өскен, жерлестікке негізделген жасырын одақ. 3) Коррупция — лауазымды (тендер бекіту, тергеуді тоқтату) жеке пайда үшін пайдалану.',
+    'Коррупцияның зияны: 1) Мемлекеттік ресурстар ысырапталады — жұмыс нашар орындалса да ақша кетті. 2) Халықтың мемлекетке сенімі кемиді. 3) Бәсекелестік бұзылады — честный бизнес жеңе алмайды. 4) Инвестиция азаяды — коррупциялы ортаға бизнес келмейді.',
+    'Алдын алу механизмдері: 1) E-gov — тендерлерді ашық онлайн жариялау. 2) Заңнама — мүдделер қақтығысы туралы заң, мүлік декларациясы. 3) Халықаралық тәжірибе — Transparency International стандарттары, сот тәуелсіздігі. 4) Азаматтық бақылау — БАҚ, НПО рөлін күшейту.',
+    'Протекционизм — кадрларды іріктеуде таныс/туыс/руласты артық көру. Коррупция — лауазымды заңсыз пайда табу үшін пайдалану (пара, ресурсты ұрлау). Протекционизм кадр іріктеу мәселесі, коррупция — қылмыстық іс-әрекет. Протекционизм коррупцияға жол ашады, бірақ олар бір нәрсе емес.'
+  ],
+  [
+    'Бюджет тапшылығы — мемлекет шығысының кірістен асуы. Мұнай бағасы түскенде: бюджеттің негізгі кіріс көзі азайды → 15% тапшылық пайда болды. Бұл сыртқы факторға (шикізат бағасы) тәуелділіктің қаупін көрсетеді.',
+    '1) Ақша эмиссиясы — тез шешім, қарыз жоқ, бірақ инфляция тудырады. 2) Сыртқы қарыз — инфляциясыз, бірақ болашақ ауыртпалық, тәуелділік артады. 3) Салық 5% арттыру — ішкі ресурс, бірақ бизнес пен халыққа қысым. Оптималды: үшеуін біріктіру + шығысты оңтайландыру.',
+    'Ақша эмиссиясы → айналымдағы ақша молаяды → тауарға сұраныс өседі, ұсыныс сол қалады → баға өседі → инфляция. Инфляция — жасырын салық: халықтың жинаған ақшасы қадірсізденеді. Гиперинфляция экономиканы тұрақсыздандырады.',
+    'Бала жәрдемақысы мен зейнетақы — мемлекеттің міндетті әлеуметтік трансферттері. Оларды қысқарту заңды болуы мүмкін, бірақ: 1) Митинг — халықтың наразылығын көрсетеді. 2) Әлсіз топтар зардап шегеді. 3) Саяси тұрақсыздық тудырады. Дұрыс шешім: шығысты оңтайландыру, әлеуметтік төлемдерді соңғы кезекте қысқарту.'
+  ],
+  [
+    'АӨК — ауыл шаруашылығы өнімдерін өндіру, өңдеу және жеткізу салаларының жиынтығы. Үш буын: 1) Өндіру (фермер) — Мейірбек осы буында. 2) Өңдеу (ұн диірмені, сүт зауыты). 3) Жеткізу (дистрибьютор, дүкен). Барлық буын тиімді жұмыс істесе ғана тізбек жұмыс істейді.',
+    'Мейірбекке қолдаудың үш құралы: 1) Субсидиялау — тыңайтқыш, техникаға бюджеттен тікелей ақша. 2) Өтемақы — шығынды (табиғат апаты, баға күйреуі) мемлекет өтейді. 3) Жеңілдікті кредит — пайызды мемлекет субсидиялайды, фермер арзан несие алады. Қосымша: нарыққа шығу каналдарын ашу (кооператив, онлайн сауда).',
+    'Аграрлық саясат барлық өндірушілерге тең мүмкіндік беруі тиіс. Ірі агрохолдингтер тиімді — жақсы. Бірақ шағын фермерлерді ығыстырса: монополия пайда болады, ауыл халқы жұмыссыз қалады, тағам алуандылығы азаяды. Шешім: субсидия квотасын шағын фермерлерге арнайы бөлу, кооперативтерді дамыту.',
+    'Азық-түлік қауіпсіздігінің үш өлшемі: нақты қолжетімділік, экономикалық қолжетімділік, өнім қауіпсіздігі. Шағын фермерлердің маңызы: 1) Диверсификация — бір агрохолдинг банкрот болса, шағын фермерлер ел тамағын қамтамасыз етеді. 2) Ауыл экономикасы — жергілікті жұмыс орын. 3) Жер сақтау — жерді өңдеп ұстайды.'
+  ],
+  [
+    'Гипотеза — тек сапалық сипаттама ("экономика өседі"). Болжам — сапалық + сандық деректерге негізделген ("ЖІӨ 5% өседі"). Айгүлдің сыны дұрыс: болжам мұнай бағасының мүмкін түсуіне, ішкі тұтыну серпіні мен сыртқы нарыққа негізделмесе — ол гипотеза деңгейінде қалады.',
+    'Болжам іске аспаудың себептері: 1) Сыртқы факторлар ескерілмеді — мұнай бағасының түсу тәуекелі. 2) Пессимистік сценарий болмады — тек "базалық" нұсқа жасалды. 3) Инфляция динамикасы дұрыс есептелмеді. Ескеру керек: халықаралық конъюнктура, шикізат бағасы, валюта бағамы, саяси тәуекелдер.',
+    'Бюджет тапшылығын жабу фискальдық шаралары: 1) Мемлекеттік шығысты қысқарту (инфрақұрылым жобаларын кейінге қалдыру). 2) Салық базасын кеңейту. 3) Резервтік қорды (Ұлттық қор) пайдалану. 4) Мемлекеттік активтерді сату. 5) Сыртқы қарыз — соңғы нұсқа.',
+    'Дискрециялық саясат — үкімет саналы шешім қабылдап шығысты өзгертеді; икемді, бірақ баяу (парламент, бюджет процесі). Автоматтық саясат — "өздігінен тұрақтандырғыштар": жұмыссыздық жәрдемақысы, прогрессивті салық; жылдам, саяси шешім қажет емес. Бұл жағдайда автоматтық тез іске қосылады, дискрециялық — терең реформа үшін қажет.'
+  ]
+];
+
+
+const cases = [
+  {
+    icon: '📊',
+    label: 'КЕЙС 1',
+    title: 'Жоспарлаусыз даму мүмкін бе?',
+    desc: 'Жоспарлаудың түрлері мен мәніне арналған',
+    tag: 'Дәріс 6 — Жоспарлау',
+    scenario: 'Қазақстанның бір аймағында жергілікті өкімет бюджетті бекіте алмай, жоспар жасауды кейінге қалдырды. Нәтижесінде мектеп салу, жол жөндеу, әлеуметтік төлемдер — барлығы ретсіздікке ұшырады. Аймақ басшысы: "Нарық өзі реттейді, жоспар керек емес" деп мәлімдеді.',
+    questions: [
+      'Аймақ басшысының тезисі дұрыс па? Жоспарлаудың экономикадағы рөлі қандай?',
+      'Бұл жағдайда қандай жоспарлау түрі қолданылуы керек еді — директивті ме, индикативті ме?',
+      'Ағымдағы жоспарлау мен стратегиялық жоспарлаудың айырмашылығы неде? Аймаққа қайсысы қажет?',
+      'Жоспар жасамаудың аймақтың әлеуметтік-экономикалық дамуына қандай салдары болады?'
+    ],
+    hints: [
+      'Жоспарлау — басқарудың негізгі функциясы, ол мақсатты анықтап, ресурстарды дұрыс бөледі.',
+      'Директивті жоспар міндетті, индикативті — ұсынымдық сипатта болады.',
+      'Ағымдағы жоспар жыл сайын бюджет негізінде жасалады, стратегиялық — ұзақ мерзімді бағыт.',
+      'Жоспарсыздық: ресурстардың ысырабы, халыққа қызмет көрсетудің нашарлауы, инвестиция тартудың қиындауы.'
+    ]
+  },
+  {
+    icon: '🏛',
+    label: 'КЕЙС 2',
+    title: 'Бюрократияның тұзағы',
+    desc: 'Дисфункциялар мен бюрократия туралы',
+    tag: 'Дәріс 7 — Дисфункция',
+    scenario: 'Кәсіпкер Асқар жаңа бизнес ашу үшін рұқсат алуға барды. Оған 12 құжат тізімін берді, әрбір мекемеге жеке өтініш жаздырды, 3 ай күттірді. Соңында рұқсатты беруден бас тартты — себебі бір мөрдің орны дұрыс емес екен. Асқар бірнеше жолы "таныс арқылы шешуге" кеңес алды.',
+    questions: [
+      'Бұл жағдайда қандай мемлекеттік дисфункция байқалады? Бюрократияның қай себебі ең басты?',
+      '"Таныс арқылы шешу" кеңесі қандай дисфункция түріне жатады — фаворитизм, непотизм, трайбализм?',
+      'Осы мәселені шешу үшін e-gov жүйесі қалай көмектесе алады?',
+      'Бюрократияны жою мүмкін бе? Оны азайтудың қандай жолдары бар?'
+    ],
+    hints: [
+      'Бюрократияның себептері: ұйымдастырушылық (құжат көп), әлеуметтік (кәсіби деңгей төмен), ақпараттық (техника жоқ).',
+      'Таныс арқылы шешу — фаворитизм, туыс болса — непотизм, ру бойынша — трайбализм.',
+      'E-gov: шенеунік пен азаматтың тікелей байланысын азайтып, мөлдірлікті арттырады.',
+      'Бюрократияны толық жою мүмкін емес, бірақ цифрландыру, заңнаманы жеңілдету арқылы азайтуға болады.'
+    ]
+  },
+  {
+    icon: '⚖️',
+    label: 'КЕЙС 3',
+    title: 'Коррупцияға қарсы күрес',
+    desc: 'Жемқорлық және оған қарсы шаралар',
+    tag: 'Дәріс 7 — Коррупция',
+    scenario: 'Аудандық әкім мемлекеттік мектеп жөндеу тендерін жариялады. Тендерді жеңген компания оның немере ағасының фирмасы болып шықты. Жұмыс нашар орындалды, бірақ ақша толық төленді. Бұл жайт газетке шыққаннан кейін де тергеу басталмады — себебі прокурор да сол ауданда туып өскен.',
+    questions: [
+      'Бұл жағдайда коррупцияның қандай нақты формалары байқалады? (непотизм, фаворитизм, трайбализм)',
+      'Коррупция мемлекеттік реттеудің тиімділігіне қалай зиян тигізеді?',
+      'Осы жағдайды алдын алу үшін қандай механизмдер (e-gov, заңнама, халықаралық тәжірибе) қолданылуы керек?',
+      'Коррупция мен протекционизмнің айырмашылығы неде?'
+    ],
+    hints: [
+      'Непотизм — туыстарға артықшылық, трайбализм — жерлес/руластарды қолдау, фаворитизм — жеке достарды.',
+      'Коррупция: мемлекет ресурстары ысырапталады, бюджет шығыны өседі, халықтың сенімі кемиді.',
+      'E-gov тендерлерді ашық жариялайды, онлайн бақылауды күшейтеді.',
+      'Протекционизм — кадр іріктеу мәселесі, коррупция — лауазымды пайдаланып заңсыз пайда табу.'
+    ]
+  },
+  {
+    icon: '💰',
+    label: 'КЕЙС 4',
+    title: 'Бюджет тапшылығы дағдарысы',
+    desc: 'Мемлекеттік бюджет және фискальдық саясат',
+    tag: 'Дәріс 8 — Бюджет',
+    scenario: 'Елде мұнай бағасы күрт түсті. Үкімет бюджет тапшылығымен бетпе-бет келді: шығыс кірістен 15%-ға асып кетті. Министрлер кеңесі үш нұсқаны қарады: 1) Ақша эмиссиясы, 2) Сыртқы қарыз алу, 3) Салықты 5%-ға арттыру. Бала жәрдемақысы мен зейнетақы төлемдерін қысқартпауды талап еткен митинг өтті.',
+    questions: [
+      'Бюджет тапшылығының анықтамасы қандай? Бұл жағдайда тапшылық қалай пайда болды?',
+      'Үш нұсқаның әрқайсысының артықшылықтары мен кемшіліктерін салыстырыңыз.',
+      'Ақша эмиссиясы неліктен қауіпті? Инфляциямен байланысын түсіндіріңіз.',
+      'Бала жәрдемақысы мен зейнетақы қандай бюджеттік категорияға жатады? Оларды қысқартуға болады ма?'
+    ],
+    hints: [
+      'Бюджет тапшылығы — шығыстың кірістен асып кетуі. Мұнай кірісі азайғанда тапшылық пайда болды.',
+      'Эмиссия — тез шешім, бірақ инфляция тудырады. Қарыз — болашақ ауыртпалық. Салық — халыққа қысым.',
+      'Ақша эмиссиясы → ақша көбейеді → сатып алу қабілеті төмендейді → баға өседі → инфляция.',
+      'Бала жәрдемақысы мен зейнетақы — бюджеттің міндетті шығысы (трансферттер), оларды қысқарту әлеуметтік шиеленіс тудырады.'
+    ]
+  },
+  {
+    icon: '🌾',
+    label: 'КЕЙС 5',
+    title: 'АӨК дамыту стратегиясы',
+    desc: 'Ауыл шаруашылығын мемлекеттік қолдау',
+    tag: 'Дәріс 9 — АӨК',
+    scenario: 'Оңтүстік Қазақстанда шағын фермер Мейірбек бидай өсіреді. Бірақ тыңайтқыш бағасы өсіп, кредит пайызы жоғары, өнімін қайдан өткізерін білмейді. Ауданда ірі агрохолдинг бар — олар мемлекеттен субсидия алып, нарықтан шағын фермерлерді ығыстырып жатыр. Мейірбек мемлекетке хат жазды: "АӨК-ті дамытамыз десеңіз, шағын фермерлерді де қолдаңыздар!"',
+    questions: [
+      'АӨК дегеніміз не? Оның қандай салалары бар? Мейірбектің шаруашылығы қай буынға жатады?',
+      'Мейірбекке мемлекет қандай қолдау құралдарын (субсидия, өтемақы, жеңілдікті кредит) ұсына алады?',
+      'Ірі агрохолдингтің субсидия алуы — бұл дұрыс па? Аграрлық саясатта тепе-теңдікті қалай сақтауға болады?',
+      'Азық-түлік қауіпсіздігі тұрғысынан шағын фермерлерді қолдаудың маңызы неде?'
+    ],
+    hints: [
+      'АӨК: өндіру (фермер) + өңдеу (зауыт) + жеткізу (дистрибьютор) салаларын қамтиды. Мейірбек — өндіру буынында.',
+      'Субсидия — тікелей ақша, өтемақы — шығынды өтеу, жеңілдікті кредит — төмен пайыз. Мейірбекке үшеуі де қажет.',
+      'Аграрлық саясат барлық өндірушілерге тең мүмкіндік беруі керек, монополияға жол бермеуі тиіс.',
+      'Азық-түлік қауіпсіздігі: нақты қолжетімділік + экономикалық қолжетімділік + өнім қауіпсіздігі. Шағын фермерлер диверсификацияны қамтамасыз етеді.'
+    ]
+  },
+  {
+    icon: '🔮',
+    label: 'КЕЙС 6',
+    title: 'Болжам бен шындық',
+    desc: 'Болжау, жоспарлау және фискальдық саясат кешенді',
+    tag: 'Дәріс 6, 8 — Кешенді',
+    scenario: 'Үкімет 3 жылға арналған экономикалық болжам жасады: ЖІӨ өсімі 5%, инфляция 4%, бюджет тепе-тең. Бірақ бірінші жылдың өзінде: ЖІӨ өсімі — 1,5%, инфляция — 9%, бюджет тапшылығы 8%. Экономист Айгүл: "Болжам гипотеза деңгейінде қалды, нақты сандық деректерге негізделмеді" деп сынады.',
+    questions: [
+      'Гипотеза мен болжамның (прогноздың) айырмашылығы неде? Айгүлдің сыны дұрыс па?',
+      'Болжам неге іске аспады? Макроэкономикалық болжауда нені ескеру керек?',
+      'Бюджет тапшылығын жабу үшін қандай фискальдық саясат шаралары қолданылуы мүмкін?',
+      'Дискрециялық және автоматтық фискальдық саясаттың қайсысы бұл жағдайда тиімдірек болар еді?'
+    ],
+    hints: [
+      'Гипотеза — тек сапалық сипаттама, болжам — сапалық + сандық деректерге негізделген, сенімдірек.',
+      'Болжам дұрыс болу үшін: халықаралық жағдай, шикізат бағасы, ішкі тұтыну серпіні ескерілуі керек.',
+      'Фискальдық шаралар: шығысты қысқарту, салықты арттыру, мемлекеттік инвестицияны реттеу.',
+      'Дискрециялық (саналы) саясат икемдірек, бірақ баяу. Автоматтық (өздігінен) тездірек іске қосылады.'
+    ]
+  }
+];
+
+let currentCase = null;
+let thinkInterval = null;
+let answerInterval = null;
+let thinkSec = 240; // 4 min
+let answerSec = 300; // 5 min
+let completedCases = new Set();
+
+function buildGrid() {
+  const grid = document.getElementById('casesGrid');
+  cases.forEach((c, i) => {
+    const color = COLORS[i];
+    const card = document.createElement('div');
+    card.className = 'case-card';
+    card.style.setProperty('--case-color', color);
+    card.id = `card-${i}`;
+    card.onclick = () => openCase(i);
+    card.innerHTML = `
+      <div class="done-badge">✓ Аяқталды</div>
+      <div class="case-num">${c.label}</div>
+      <span class="case-icon">${c.icon}</span>
+      <div class="case-title">${c.title}</div>
+      <div class="case-desc">${c.desc}</div>
+      <div class="case-tag">${c.tag}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function openCase(idx) {
+  if (completedCases.has(idx)) return;
+  currentCase = idx;
+  const c = cases[idx];
+  const color = COLORS[idx];
+
+  document.getElementById('modal').style.setProperty('--modal-color', color);
+  document.getElementById('modalLabel').textContent = c.label + ' — ' + c.tag;
+  document.getElementById('modalTitle').textContent = c.title;
+  document.getElementById('modalScenario').textContent = c.scenario;
+
+  const qDiv = document.getElementById('modalQuestions');
+  qDiv.innerHTML = '';
+  c.questions.forEach((q, i) => {
+    qDiv.innerHTML += `
+      <div class="question-item">
+        <div class="q-num">${i+1}</div>
+        <div class="q-text">${q}</div>
+      </div>`;
+  });
+
+  const hDiv = document.getElementById('hintItems');
+  hDiv.innerHTML = '';
+  c.hints.forEach(h => {
+    hDiv.innerHTML += `
+      <div class="hint-item">
+        <div class="hint-dot"></div>
+        <div>${h}</div>
+      </div>`;
+  });
+
+  // Reset hint
+  document.getElementById('hintContent').classList.remove('open');
+  document.getElementById('hintToggle').classList.remove('open');
+
+  // Populate answers
+  const aDiv = document.getElementById('answerItems');
+  aDiv.innerHTML = '';
+  const answers = caseAnswers[idx];
+  c.questions.forEach((q, i) => {
+    aDiv.innerHTML += `
+      <div class="answer-item">
+        <div class="answer-q-label">Сұрақ ${i+1}</div>
+        <div class="answer-q-text">${q}</div>
+        <div class="answer-text">${answers[i]}</div>
+      </div>`;
+  });
+
+  // Reset answer panel
+  document.getElementById('answerContent').classList.remove('open');
+  document.getElementById('answerToggle').classList.remove('open');
+
+  resetTimers();
+  document.getElementById('modalOverlay').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  stopAllTimers();
+}
+
+function stopAllTimers() {
+  clearInterval(thinkInterval);
+  clearInterval(answerInterval);
+  thinkInterval = null;
+  answerInterval = null;
+}
+
+function resetTimers() {
+  stopAllTimers();
+  thinkSec = 240;
+  answerSec = 300;
+  updateThinkDisplay();
+  updateAnswerDisplay();
+  document.getElementById('thinkProgress').style.width = '100%';
+  document.getElementById('answerProgress').style.width = '100%';
+  document.getElementById('thinkStatus').textContent = '';
+  document.getElementById('answerStatus').textContent = '';
+  document.getElementById('thinkDisplay').classList.remove('time-warning');
+  document.getElementById('answerDisplay').classList.remove('time-warning');
+}
+
+function fmtTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function updateThinkDisplay() {
+  document.getElementById('thinkDisplay').textContent = fmtTime(thinkSec);
+}
+function updateAnswerDisplay() {
+  document.getElementById('answerDisplay').textContent = fmtTime(answerSec);
+}
+
+function startThink() {
+  stopAllTimers();
+  thinkSec = 240;
+  updateThinkDisplay();
+  document.getElementById('thinkProgress').style.width = '100%';
+  document.getElementById('thinkStatus').textContent = 'Жүріп жатыр...';
+  document.getElementById('answerStatus').textContent = '';
+
+  thinkInterval = setInterval(() => {
+    thinkSec--;
+    updateThinkDisplay();
+    const pct = (thinkSec / 240) * 100;
+    document.getElementById('thinkProgress').style.width = pct + '%';
+
+    if (thinkSec <= 30) {
+      document.getElementById('thinkDisplay').classList.add('time-warning');
+      document.getElementById('thinkStatus').textContent = '⚠ Уақыт аяқталуда!';
+    }
+
+    if (thinkSec <= 0) {
+      clearInterval(thinkInterval);
+      document.getElementById('thinkDisplay').textContent = '0:00';
+      document.getElementById('thinkStatus').textContent = '✓ Ойлану уақыты бітті!';
+      document.getElementById('thinkDisplay').classList.remove('time-warning');
+      // Auto start answer
+      setTimeout(() => startAnswer(), 800);
+    }
+  }, 1000);
+}
+
+function startAnswer() {
+  clearInterval(thinkInterval);
+  answerSec = 300;
+  updateAnswerDisplay();
+  document.getElementById('answerProgress').style.width = '100%';
+  document.getElementById('answerStatus').textContent = 'Жүріп жатыр...';
+  document.getElementById('thinkStatus').textContent = '';
+
+  answerInterval = setInterval(() => {
+    answerSec--;
+    updateAnswerDisplay();
+    const pct = (answerSec / 300) * 100;
+    document.getElementById('answerProgress').style.width = pct + '%';
+
+    if (answerSec <= 60) {
+      document.getElementById('answerDisplay').classList.add('time-warning');
+      document.getElementById('answerStatus').textContent = '⚠ 1 минут қалды!';
+    }
+
+    if (answerSec <= 0) {
+      clearInterval(answerInterval);
+      document.getElementById('answerDisplay').textContent = '0:00';
+      document.getElementById('answerStatus').textContent = '⏱ Уақыт бітті!';
+      document.getElementById('answerDisplay').classList.remove('time-warning');
+    }
+  }, 1000);
+}
+
+function toggleHint() {
+  const content = document.getElementById('hintContent');
+  const toggle = document.getElementById('hintToggle');
+  content.classList.toggle('open');
+  toggle.classList.toggle('open');
+}
+
+function toggleAnswer() {
+  const content = document.getElementById('answerContent');
+  const toggle = document.getElementById('answerToggle');
+  content.classList.toggle('open');
+  toggle.classList.toggle('open');
+}
+
+function markDone() {
+  if (currentCase === null) return;
+  completedCases.add(currentCase);
+  document.getElementById(`card-${currentCase}`).classList.add('done');
+  updateProgress();
+  closeModal();
+}
+
+function updateProgress() {
+  const n = completedCases.size;
+  document.getElementById('progressFill').style.width = (n / 6 * 100) + '%';
+  document.getElementById('progressCount').textContent = `${n} / 6`;
+}
+
+// Close on overlay click
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+buildGrid();
+</script>
+</body>
+</html>
