@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кейстік Тапсырмалар — Дәріс 9, 10, 11</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080C14;
+    --surface: #0F1825;
+    --card: #141F30;
+    --border: #1E3050;
+    --accent: #00C9FF;
+    --accent2: #00E5A0;
+    --accent3: #FF6B6B;
+    --accent4: #FFB347;
+    --accent5: #B388FF;
+    --accent6: #FF80AB;
+    --text: #E8F0FE;
+    --muted: #6B85A8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Manrope', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(0,201,255,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(0,229,160,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(179,136,255,0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header { text-align: center; margin-bottom: 60px; }
+
+  .header-badge {
+    display: inline-block;
+    background: rgba(0,201,255,0.1);
+    border: 1px solid rgba(0,201,255,0.3);
+    color: var(--accent);
+    font-family: 'Unbounded', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    padding: 8px 20px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(24px, 4vw, 42px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    font-weight: 500;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .rules-bar {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+  }
+
+  .rule-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .rule-chip .icon { font-size: 16px; }
+
+  .cases-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+  @media (max-width: 768px) { .cases-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .cases-grid { grid-template-columns: 1fr; } }
+
+  .case-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 24px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+
+  .case-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--case-color, #00C9FF) 0%, transparent 60%);
+    opacity: 0.05;
+    transition: opacity 0.3s;
+  }
+
+  .case-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--case-color, #00C9FF);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 1px var(--case-color, #00C9FF);
+  }
+
+  .case-card:hover::before { opacity: 0.1; }
+
+  .case-card.done { opacity: 0.5; cursor: default; }
+  .case-card.done:hover { transform: none; }
+
+  .case-num {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--case-color, #00C9FF);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .case-icon {
+    font-size: 40px;
+    margin-bottom: 16px;
+    display: block;
+    filter: drop-shadow(0 0 12px var(--case-color, #00C9FF));
+  }
+
+  .case-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  .case-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  .case-tag {
+    display: inline-block;
+    margin-top: 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .done-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--accent2);
+    color: #000;
+    border-radius: 100px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    display: none;
+  }
+  .case-card.done .done-badge { display: block; }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 760px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(30px) scale(0.97);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+  }
+
+  .modal-overlay.active .modal { transform: translateY(0) scale(1); }
+
+  .modal-header { padding: 28px 28px 0; position: relative; }
+
+  .modal-case-label {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--modal-color, #00C9FF);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .modal-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(16px, 2.5vw, 22px);
+    font-weight: 800;
+    line-height: 1.3;
+    margin-bottom: 20px;
+    padding-right: 48px;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+  .timer-section { padding: 0 28px; margin-bottom: 4px; }
+  .timers-row { display: flex; gap: 12px; }
+
+  .timer-box {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .timer-box.think { border-color: var(--accent4); }
+  .timer-box.answer { border-color: var(--accent2); }
+
+  .timer-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .timer-display {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 2px;
+  }
+
+  .timer-box.think .timer-display { color: var(--accent4); }
+  .timer-box.answer .timer-display { color: var(--accent2); }
+
+  .timer-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    transition: width 1s linear;
+    border-radius: 0 0 14px 14px;
+  }
+
+  .timer-box.think .timer-progress { background: var(--accent4); }
+  .timer-box.answer .timer-progress { background: var(--accent2); }
+
+  .timer-status { font-size: 11px; font-weight: 600; margin-top: 4px; min-height: 16px; }
+  .timer-box.think .timer-status { color: var(--accent4); }
+  .timer-box.answer .timer-status { color: var(--accent2); }
+
+  .timer-controls { display: flex; gap: 10px; padding: 12px 28px; margin-bottom: 4px; }
+
+  .btn {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .btn-think { background: rgba(255,179,71,0.15); border: 1px solid rgba(255,179,71,0.4); color: var(--accent4); }
+  .btn-think:hover { background: rgba(255,179,71,0.25); }
+  .btn-answer { background: rgba(0,229,160,0.15); border: 1px solid rgba(0,229,160,0.4); color: var(--accent2); }
+  .btn-answer:hover { background: rgba(0,229,160,0.25); }
+  .btn-reset { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); flex: 0 0 auto; padding: 10px 14px; }
+  .btn-reset:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+  .scenario-block {
+    margin: 0 28px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--modal-color, #00C9FF);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 18px;
+  }
+
+  .scenario-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--modal-color, #00C9FF); margin-bottom: 8px; }
+  .scenario-text { font-size: 14px; line-height: 1.7; color: var(--text); }
+
+  .questions-section { padding: 0 28px; margin-bottom: 8px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+
+  .question-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    align-items: flex-start;
+  }
+
+  .q-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--modal-color, #00C9FF);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .q-text { font-size: 14px; line-height: 1.6; color: var(--text); font-weight: 500; }
+
+  .hint-section { padding: 0 28px 28px; }
+
+  .hint-toggle {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: var(--muted);
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .hint-toggle:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+  .hint-arrow { font-size: 16px; transition: transform 0.3s; }
+  .hint-content { display: none; margin-top: 12px; background: rgba(255,179,71,0.06); border: 1px solid rgba(255,179,71,0.2); border-radius: 12px; padding: 16px 18px; }
+  .hint-content.open { display: block; }
+  .hint-toggle.open .hint-arrow { transform: rotate(180deg); }
+
+  .hint-item { display: flex; gap: 10px; margin-bottom: 10px; font-size: 13px; line-height: 1.6; color: var(--text); align-items: flex-start; }
+  .hint-item:last-child { margin-bottom: 0; }
+  .hint-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent4); flex-shrink: 0; margin-top: 7px; }
+
+  .done-btn {
+    width: 100%;
+    margin: 0 0 4px;
+    padding: 14px;
+    background: linear-gradient(135deg, rgba(0,229,160,0.2), rgba(0,201,255,0.2));
+    border: 1px solid rgba(0,229,160,0.4);
+    border-radius: 12px;
+    color: var(--accent2);
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .done-btn:hover { background: linear-gradient(135deg, rgba(0,229,160,0.3), rgba(0,201,255,0.3)); }
+
+  .answer-toggle {
+    width: 100%;
+    background: rgba(179,136,255,0.07);
+    border: 1px solid rgba(179,136,255,0.25);
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: var(--accent5);
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s;
+    text-align: left;
+    margin-bottom: 0;
+  }
+  .answer-toggle:hover { background: rgba(179,136,255,0.14); }
+  .answer-arrow { font-size: 16px; transition: transform 0.3s; }
+  .answer-toggle.open .answer-arrow { transform: rotate(180deg); }
+
+  .answer-content { display: none; margin-top: 12px; background: rgba(179,136,255,0.05); border: 1px solid rgba(179,136,255,0.2); border-radius: 12px; padding: 18px; margin-bottom: 12px; }
+  .answer-content.open { display: block; }
+
+  .answer-item { margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid rgba(179,136,255,0.12); }
+  .answer-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .answer-q-label { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--accent5); margin-bottom: 6px; }
+  .answer-q-text { font-size: 12px; color: var(--muted); margin-bottom: 8px; font-style: italic; line-height: 1.5; }
+  .answer-text { font-size: 13.5px; line-height: 1.75; color: var(--text); }
+
+  .progress-bar-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .progress-label { font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+  .progress-track { flex: 1; height: 6px; background: var(--card); border-radius: 100px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent2), var(--accent)); border-radius: 100px; width: 0%; transition: width 0.5s ease; }
+  .progress-count { font-family: 'Unbounded', sans-serif; font-size: 13px; font-weight: 900; color: var(--accent2); white-space: nowrap; }
+
+  .time-warning { animation: pulse-warn 1s ease infinite; }
+  @keyframes pulse-warn { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="header-badge">Дәріс 9 · 10 · 11 — Экономика</div>
+    <h1>Кейстік Тапсырмалар</h1>
+    <p class="subtitle">Топтарға бөлініп, кейсті таңдаңыздар. Ойлануға 4 минут, жауап беруге 5 минут берілді.</p>
+  </header>
+
+  <div class="rules-bar">
+    <div class="rule-chip"><span class="icon">👥</span> Топ кейс таңдайды</div>
+    <div class="rule-chip"><span class="icon">🧠</span> 4 мин ойлану</div>
+    <div class="rule-chip"><span class="icon">🗣</span> 5 мин жауап</div>
+    <div class="rule-chip"><span class="icon">💡</span> Подсказка бар</div>
+  </div>
+
+  <div class="cases-grid" id="casesGrid"></div>
+
+  <div class="progress-bar-wrap">
+    <span class="progress-label">Прогресс</span>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <span class="progress-count" id="progressCount">0 / 6</span>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-case-label" id="modalLabel"></div>
+      <div class="modal-title" id="modalTitle"></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <div class="timer-section">
+      <div class="timers-row">
+        <div class="timer-box think">
+          <div class="timer-label">🧠 Ойлану</div>
+          <div class="timer-display" id="thinkDisplay">4:00</div>
+          <div class="timer-status" id="thinkStatus"></div>
+          <div class="timer-progress" id="thinkProgress" style="width:100%"></div>
+        </div>
+        <div class="timer-box answer">
+          <div class="timer-label">🗣 Жауап беру</div>
+          <div class="timer-display" id="answerDisplay">5:00</div>
+          <div class="timer-status" id="answerStatus"></div>
+          <div class="timer-progress" id="answerProgress" style="width:100%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timer-controls">
+      <button class="btn btn-think" onclick="startThink()">▶ Ойлануды бастау</button>
+      <button class="btn btn-answer" onclick="startAnswer()">▶ Жауапты бастау</button>
+      <button class="btn btn-reset" onclick="resetTimers()" title="Таймерді қайта бастау">↺</button>
+    </div>
+
+    <div class="scenario-block">
+      <div class="scenario-label">📋 Жағдай</div>
+      <div class="scenario-text" id="modalScenario"></div>
+    </div>
+
+    <div class="questions-section">
+      <div class="section-label">❓ Талқылау сұрақтары</div>
+      <div id="modalQuestions"></div>
+    </div>
+
+    <div class="hint-section">
+      <button class="hint-toggle" id="hintToggle" onclick="toggleHint()">
+        <span>💡 Подсказка (жауап нұсқаулары)</span>
+        <span class="hint-arrow">▼</span>
+      </button>
+      <div class="hint-content" id="hintContent">
+        <div id="hintItems"></div>
+      </div>
+      <br>
+      <button class="answer-toggle" id="answerToggle" onclick="toggleAnswer()">
+        <span>📖 Үлгі жауаптар (оқытушыға арналған)</span>
+        <span class="answer-arrow">▼</span>
+      </button>
+      <div class="answer-content" id="answerContent">
+        <div id="answerItems"></div>
+      </div>
+      <br>
+      <button class="done-btn" onclick="markDone()">✓ Кейсті аяқталды деп белгілеу</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const COLORS = ['#00C9FF','#00E5A0','#FFB347','#FF6B6B','#B388FF','#FF80AB'];
+
+const cases = [
+  {
+    icon: '🌾',
+    label: 'КЕЙС 1',
+    title: 'Шағын фермер vs Агрохолдинг',
+    desc: 'АӨК-тегі теңсіздік және мемлекеттік қолдау',
+    tag: 'Дәріс 9 — АӨК',
+    scenario: 'Солтүстік Қазақстанда фермер Ақан 50 гектар жерде бидай өсіреді. Тыңайтқыш бағасы соңғы жылда 40%-ға өскен, банк кредитін 18% пайызбен ұсынады. Жергілікті нарықта ірі агрохолдинг үстем: олар мемлекеттен субсидия алып, бидайды арзан бағаға сатып, шағын фермерлерді ығыстырып жатыр. Ақан: "Мен субсидия сұрадым — маған 2 жылға кезек деді. Холдингке 2 аптада берді" деп шағым айтты. Аудан әкімі: "Ірі өндіруші тиімдірек, азық-түлік қауіпсіздігін олар қамтамасыз етеді" деп жауап берді.',
+    questions: [
+      'АӨК дегеніміз не? Ақанның шаруашылығы АӨК-тің қай буынына жатады?',
+      'Мемлекет Ақанға қандай қолдау құралдарын (субсидия, өтемақы, жеңілдікті кредит) ұсына алады?',
+      'Аудан әкімінің позициясы дұрыс па? Азық-түлік қауіпсіздігі тек ірі өндірушілерге тәуелді болуы мүмкін бе?',
+      'Аграрлық саясатта шағын және ірі өндірушілер арасында тепе-теңдікті қалай сақтауға болады?'
+    ],
+    hints: [
+      'АӨК 3 буыннан тұрады: өндіру (фермер) → өңдеу (зауыт) → жеткізу (дистрибьютор). Ақан бірінші буында.',
+      'Субсидия — тікелей ақша; өтемақы — тыңайтқыш/отын шығынын өтеу; жеңілдікті кредит — 4-6% пайыз. Ақанға барлығы қажет.',
+      'Азық-түлік қауіпсіздігінің 3 өлшемі: нақты қолжетімділік, экономикалық қолжетімділік, өнім қауіпсіздігі.',
+      'Аграрлық саясаттың 4 элементі бар: жер, қаржы, әлеуметтік саясат, нарықты қалыптастыру.'
+    ]
+  },
+  {
+    icon: '🏭',
+    label: 'КЕЙС 2',
+    title: 'Зауытты жаңғырту немесе жабу',
+    desc: 'Өңдеуші өнеркәсіп пен декарбонизация',
+    tag: 'Дәріс 10 — Өнеркәсіп',
+    scenario: 'Павлодардағы алюминий зауыты 3000 адамды жұмыспен қамтиды. Зауыт ескі технологиямен жұмыс жасайды: CO₂ шығарындысы нормадан 3 есе жоғары. Еуропалық инвестор жаңа экологиялық жабдыққа $200 млн инвестиция салуға дайын, бірақ шарты: жұмысшылар санын 1800-ге дейін қысқарту. Үкімет дилеммада: зауытты жаппау үшін "ластаушы" өндіріске рұқсат беру, немесе жаңғыртуды қолдап 1200 адамды жұмыссыз қалдыру.',
+    questions: [
+      'Алюминий зауыты материалдық өндірістің қай саласына жатады — өндіруші ме, өңдеуші ме? Айырмашылығы неде?',
+      'Декарбонизациялау дегеніміз не? Неге қазіргі әлемдік өнеркәсіп осыған бет бұрып жатыр?',
+      'Үкімет инвестормен келісімге бару керек пе? Экономикалық және әлеуметтік тұрғыдан талдаңыз.',
+      'Бұл жағдайда мемлекеттің өнеркәсіпті реттеудегі рөлі қандай болуы тиіс?'
+    ],
+    hints: [
+      'Өндіруші сала — шикізатты тікелей өндіреді (кен, мұнай). Өңдеуші сала — шикізатты өңдеп дайын өнім жасайды. Алюминий зауыты — өңдеуші.',
+      'Декарбонизация = экономиканы көмір/мұнайдан тазарту, CO₂ шығарындысын азайту. ЕО-ның "Жасыл келісімі" — жаһандық тренд.',
+      'Жаңа үрдістер: ҒЗТКЖ коммерцияландыру, автоматтандыру, цифрландыру. Жабдықты жаңарту + қайта оқыту — шешім.',
+      'Мемлекет: субсидия, салық жеңілдіктері, қайта оқыту бағдарламалары арқылы шиеленісті бәсеңдете алады.'
+    ]
+  },
+  {
+    icon: '⚡',
+    label: 'КЕЙС 3',
+    title: 'Монополия немесе бәсеке?',
+    desc: 'Энергетика нарығындағы монополиялық билік',
+    tag: 'Дәріс 11 — Бәсекелестік',
+    scenario: 'Қазақстанның бір облысында электр энергиясын тек бір компания — "ЭнергоКЕЗ" — жеткізеді. Компания соңғы 5 жылда тарифті 3 рет көтерді, жөндеу жұмыстарын кешіктіреді, тұтынушы шағымдарына жауап бермейді. Кішігірім жеке компания нарыққа кіруге тырысты — бірақ "ЭнергоКЕЗ" инфрақұрылымды бөлісуден бас тартты. Тұтынушылар антимонопольдік комитетке арыз берді.',
+    questions: [
+      '"ЭнергоКЕЗ" — таза монополия ма? Монополияның белгілері мен зардаптары қандай?',
+      'Монопольды жоғары баға белгілеу — бағалық бәсеке әдісі ме? Монополия бәсекелестікті қалай жояды?',
+      'Антимонопольдік комитет бұл жағдайда қандай шаралар қолдана алады?',
+      'Энергетика сияқты табиғи монополияларды мемлекет қалай реттеуі керек?'
+    ],
+    hints: [
+      'Таза монополия: нарықта бір ғана сатушы, аналог өнім жоқ, нарыққа кіруге жоғары кедергі.',
+      'Монополия бағалық күрес жүргізеді: монопольды жоғары баға (тарифті өз бетінше көтеру).',
+      'Мемлекет "ойын ережесін" — антимонопольдік заңды белгілейді және оның орындалуын бақылайды.',
+      'Табиғи монополияларда мемлекет тариф белгілеп, сапа стандартын міндеттей алады.'
+    ]
+  },
+  {
+    icon: '🐄',
+    label: 'КЕЙС 4',
+    title: 'Жерді пайдалану дауы',
+    desc: 'Аграрлық жер саясаты және ауылдық даму',
+    tag: 'Дәріс 9 — АӨК',
+    scenario: 'Оңтүстік Қазақстандағы ауылда 500 гектар жер ұзақ жылдан бері тыңайып жатыр. Мемлекет бұл жерді шетелдік инвесторға 49 жылға жалға бергісі келеді — инвестор заманауи жылыжай кешені салуға уәде берді, 200 жұмыс орны ашылады. Жергілікті шаруалар қарсы: "Бұл біздің жер, шетелдікке бермеңіздер!" Экономист: "Тыңайған жер — ысырап. Инвестиция экономиканы дамытады" дейді.',
+    questions: [
+      'Ауыл шаруашылығында жер неліктен "негізгі өндіріс құралы" деп аталады? Жердің ерекшелігі неде?',
+      'Мемлекеттің жер саясаты дегеніміз не? Жерді шетелдікке жалға беру — аграрлық саясаттың қай элементіне жатады?',
+      'Жергілікті шаруалардың мүддесін және инвестицияны қалай теңестіруге болады?',
+      'Ауыл шаруашылығының маусымдық сипаты мен табиғи-климаттық факторларға тәуелділігі осы шешімге қалай әсер етеді?'
+    ],
+    hints: [
+      'Жер — қайта жасалмайтын, ауыстырылмайтын өндіріс факторы. Ауыл шаруашылығы жерсіз мүмкін емес.',
+      'Аграрлық саясаттың элементтері: жер саясаты, қаржы, әлеуметтік, нарықты қалыптастыру саясаты.',
+      'Халықтың 37,8%-ы ауылдық аумақта тұрады — ауылды дамыту стратегиялық мәселе.',
+      'Маусымдық өндіріс + климат тәуекелі → инвестор тек жоғары рентабельді өнімге (жылыжай) мүдделі.'
+    ]
+  },
+  {
+    icon: '🛒',
+    label: 'КЕЙС 5',
+    title: '"Дерттес" супермаркеттер',
+    desc: 'Бөлшек сауда нарығындағы олигополия',
+    tag: 'Дәріс 11 — Бәсекелестік',
+    scenario: 'Алматы бөлшек сауда нарығын 3 ірі супермаркет желісі бөліседі — олардың жиынтық үлесі 75%. Тұтынушылар аптасайын байқайды: бір тауардың бағасы үш желіде бір мезгілде өседі, бір мезгілде акция жарияланады, бір мезгілде "жаңа" орамамен шығарылады. Ресми сөйлесу, картель жоқ — бірақ мінез-құлықтары бірдей. Антимонопольдік орган тексеруге кірісті.',
+    questions: [
+      'Бұл нарықтық құрылым қалай аталады? Олигополияның белгілерін атаңыз.',
+      'Желілер "бағалық емес бәсекенің" қандай әдістерін қолданып жатыр? Мысалдар келтіріңіз.',
+      'Ресми картель болмаса да баға қозғалысы бірдей — бұл заңды ма? "Паралель мінез-құлық" дегеніміз не?',
+      'Мемлекет тұтынушылар мүддесін қорғау үшін қандай шаралар қолдана алады?'
+    ],
+    hints: [
+      'Олигополия: бірнеше ірі фирма нарықты бөліседі, баға белгілеуде өзара тәуелділік бар.',
+      'Бағалық емес бәсеке: өнім дизайны мен орамасы, жарнама, лоялдылық бағдарламалары, сервис сапасы.',
+      'Монополиялық бәсеке: көп фирма, бірақ дифференциалданған өнім. Олигополияда фирма саны аз.',
+      'Мемлекет: картельге тыйым, транспаренттілік талаптары, антимонопольдік айыппұлдар.'
+    ]
+  },
+  {
+    icon: '🔩',
+    label: 'КЕЙС 6',
+    title: 'Импортты алмастыру сынағы',
+    desc: 'Машина жасау өнеркәсібі мен ұлттық бәсекелестік',
+    tag: 'Дәріс 10, 11 — Кешенді',
+    scenario: '2022 жылдан бастап Қазақстанда импорттық машина бөлшектеріне деген сұраныс күрт өсті. Отандық зауыт "КазТехнику" бөлшек өндіруді 2 есе арттыруға шешім қабылдады. Бірақ нарықта 2 ірі ресейлік компанияның дилері (олар бағаны 30%-ға арзандатып сатады) және 5 шағын қытайлық импорттаушы бар. "КазТехника" директоры: "Бізбен тең жағдайда бәсекелесе алмаймыз — олар мемлекет субсидиясына отыр."',
+    questions: [
+      '"КазТехника" материалдық өндірістің қай кешеніне жатады? Машина жасаудың ұлттық экономикадағы рөлі неде?',
+      '2 ірі компания + 5 шағын импорттаушы — бұл қандай нарықтық құрылым? Жетілген бәсекеден айырмашылығы?',
+      'Демпингті (тауарды шығын бойынша сату) анықтаңыз. Бұл жағдайда ол орын алып жатыр ма?',
+      'Мемлекет "КазТехниканы" қолдау үшін өнеркәсіптік саясаттың қандай құралдарын қолдана алады?'
+    ],
+    hints: [
+      'Машина жасау — материалдық өндірістің машина жасау кешеніне жатады. Мультипликатор эффектісі жоғары.',
+      'Жетілген бәсеке: шексіз сатушылар, бірдей өнім, бағаға әсер ету мүмкін емес. Жетілмеген: кедергілер, аз сатушылар.',
+      'Демпинг — бағалық бәсекенің теріс формасы: тауарды өзіндік құнынан төмен сату арқылы бәсекелесті ығыстыру.',
+      'Мемлекет: кеден баж салығы, субсидия, мемлекеттік сатып алуда отандық өнімге артықшылық.'
+    ]
+  }
+];
+
+const caseAnswers = [
+  [
+    'АӨК (агроөнеркәсіптік кешен) — ауыл шаруашылығы өнімдерін өндіруді, қайта өңдеуді және тұтынушыға жеткізуді біріктіретін салалар жиынтығы. 3 буын: өндіру → өңдеу → жеткізу. Ақан — бірінші (өндіру) буынында.',
+    'Мемлекеттік қолдау құралдары: субсидия (тыңайтқышқа, тұқымға тікелей ақша), өтемақы (өсіп кеткен шығынды өтеу), жеңілдікті кредит (18% орнына 4-6% пайыз). Жер нарығын дамыту да маңызды.',
+    'Аудан әкімінің позициясы біржақты. Азық-түлік қауіпсіздігі тек нақты қолжетімділікке емес, диверсификацияға да байланысты. Шағын фермерлер жергілікті нарықты, байланыс бауын (resilience) қамтамасыз етеді.',
+    'Аграрлық саясат барлық өндірушілерге тең мүмкіндік беруі керек. Субсидия бөлу критерийлері ашық болуы тиіс. Монополияға қарсы заң АӨК-ке де қолданылады.'
+  ],
+  [
+    'Алюминий зауыты — өңдеуші сала: кенді (бокситті) алып, оны өңдеп дайын металл шығарады. Өндіруші сала — шикізатты жер астынан тікелей алады (мысалы, кен байыту комбинаты).',
+    'Декарбонизация — өнеркәсіптің көмірқышқыл газы шығарындысын азайтуы, "жасыл" технологияға өту. Климат өзгерісі, ЕО "Жасыл бизнес" стандарттары, экспорт нарығына кіру талаптары жүргізуші.',
+    'Инвестормен келісу ұтымды — бірақ 1200 жұмыссыз адам үшін қайта оқыту бағдарламасы, жұмысқа орналастыру қызметі міндетті. Мемлекет инвестормен шартқа бұл шарттарды енгізуі тиіс.',
+    'Мемлекет рөлі: экологиялық лицензия беру/алу, салық жеңілдіктері жаңа жабдыққа, қайта оқыту субсидиясы, аймақтық даму бағдарламасы.'
+  ],
+  [
+    '"ЭнергоКЕЗ" — табиғи монополия: бір компания, нарыққа кіруге инфрақұрылым кедергісі, аналог жоқ. Монополия белгілері: баға өсімі, сапа төмендігі, шағым елемеу.',
+    'Монопольды жоғары баға — бағалық бәсекенің ең зиянды формасы. Монополия бәсекелесті ығыстырады: инфрақұрылымды бөліспеу арқылы нарыққа кіруге жол бермейді.',
+    'Антимонопольдік комитет: тарифке шек қою, инфрақұрылымға ашық қол жетімділік талаптары, айыппұл салу, нарықты бөлу (unbundling).',
+    'Табиғи монополияларда: мемлекеттік тариф реттеу, сапа стандарттары, аудит, тұтынушы омбудсмені механизмдері.'
+  ],
+  [
+    'Жер — ауыл шаруашылығының басты, ауыстырылмайтын өндіріс факторы. Ерекшелігі: шектеулі мөлшері, географиялық тіркелуі, табиғи құнарлылығы.',
+    'Жер саясаты — аграрлық саясаттың бір элементі. Жерді жалға беру шарттары, жер кадастры, жер пайдалану ережелері осы элементке кіреді.',
+    'Шешім: инвесторға жалға берумен қатар жергілікті шаруаларды кооперативке біріктіру, қосымша жер бөлу, жергілікті жұмыс орнына басымдық беру талабы.',
+    'Маусымдық сипат пен климат тәуекелі: инвестор тек жылыжай (жыл бойы өндіріс) таңдайды — бұл отандық шаруалармен тікелей бәсеке емес, қосымшалаушы.'
+  ],
+  [
+    'Олигополия: нарықты бірнеше ірі фирма бөліседі (3 желі = 75% үлес), баға белгілеуде өзара тәуелділік бар, бірінің шешімі басқаларына ықпал етеді.',
+    'Бағалық емес бәсеке: өнімді орауыш дизайнымен өзгерту, лоялдылық карталары, жарнама, дисконт акциялары, ыңғайлы орналасу (нарыққа жақын), сервис сапасы.',
+    '"Паралель мінез-құлық" — ресми сөйлесусіз бірдей баға белгілеу. Заңды тұрғыдан дәлелдеу қиын, бірақ бәсекені тежейді. Кейбір юрисдикцияда бұл "мәмілесіз сымдастырылған іс-әрекет" деп танылады.',
+    'Мемлекет: баға мониторингі, картельге айыппұл, транспаренттілік талаптары, тұтынушы бірлестіктерін қолдау.'
+  ],
+  [
+    '"КазТехника" — машина жасау кешеніне жатады. Машина жасау: мультипликатор эффектісі жоғары (1 жұмыс орны → 4-5 байланысты), технологиялық тәуелсіздікке ықпал етеді.',
+    'Нарық — олигополиялық: 2 ірі + 5 шағын сатушы. Жетілген бәсекеден айырмасы: баға мен өнімге ықпал ету мүмкін, нарыққа кіру кедергісі бар (субсидия артықшылығы).',
+    'Демпинг — тауарды өзіндік бағасынан төмен сату (кейде мемлекет субсидиясы арқылы). Бұл жағдайда 30%-дық арзандату — демпинг белгісі бар, тексеру қажет.',
+    'Мемлекет: импортқа антидемпингтік баж, мемлекеттік сатып алуда "жергілікті мазмұн" талаптары, өнеркәсіптік субсидия, ҒЗТКЖ гранттары.'
+  ]
+];
+
+let currentCase = null;
+let thinkInterval = null;
+let answerInterval = null;
+let thinkSec = 240;
+let answerSec = 300;
+let completedCases = new Set();
+
+function buildGrid() {
+  const grid = document.getElementById('casesGrid');
+  cases.forEach((c, i) => {
+    const color = COLORS[i];
+    const card = document.createElement('div');
+    card.className = 'case-card';
+    card.style.setProperty('--case-color', color);
+    card.id = `card-${i}`;
+    card.onclick = () => openCase(i);
+    card.innerHTML = `
+      <div class="done-badge">✓ Аяқталды</div>
+      <div class="case-num">${c.label}</div>
+      <span class="case-icon">${c.icon}</span>
+      <div class="case-title">${c.title}</div>
+      <div class="case-desc">${c.desc}</div>
+      <div class="case-tag">${c.tag}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function openCase(idx) {
+  if (completedCases.has(idx)) return;
+  currentCase = idx;
+  const c = cases[idx];
+  const color = COLORS[idx];
+
+  document.getElementById('modal').style.setProperty('--modal-color', color);
+  document.getElementById('modalLabel').textContent = c.label + ' — ' + c.tag;
+  document.getElementById('modalTitle').textContent = c.title;
+  document.getElementById('modalScenario').textContent = c.scenario;
+
+  const qDiv = document.getElementById('modalQuestions');
+  qDiv.innerHTML = '';
+  c.questions.forEach((q, i) => {
+    qDiv.innerHTML += `
+      <div class="question-item">
+        <div class="q-num">${i+1}</div>
+        <div class="q-text">${q}</div>
+      </div>`;
+  });
+
+  const hDiv = document.getElementById('hintItems');
+  hDiv.innerHTML = '';
+  c.hints.forEach(h => {
+    hDiv.innerHTML += `
+      <div class="hint-item">
+        <div class="hint-dot"></div>
+        <div>${h}</div>
+      </div>`;
+  });
+
+  document.getElementById('hintContent').classList.remove('open');
+  document.getElementById('hintToggle').classList.remove('open');
+
+  const aDiv = document.getElementById('answerItems');
+  aDiv.innerHTML = '';
+  const answers = caseAnswers[idx];
+  c.questions.forEach((q, i) => {
+    aDiv.innerHTML += `
+      <div class="answer-item">
+        <div class="answer-q-label">Сұрақ ${i+1}</div>
+        <div class="answer-q-text">${q}</div>
+        <div class="answer-text">${answers[i]}</div>
+      </div>`;
+  });
+
+  document.getElementById('answerContent').classList.remove('open');
+  document.getElementById('answerToggle').classList.remove('open');
+
+  resetTimers();
+  document.getElementById('modalOverlay').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  stopAllTimers();
+}
+
+function stopAllTimers() {
+  clearInterval(thinkInterval);
+  clearInterval(answerInterval);
+  thinkInterval = null;
+  answerInterval = null;
+}
+
+function resetTimers() {
+  stopAllTimers();
+  thinkSec = 240;
+  answerSec = 300;
+  updateThinkDisplay();
+  updateAnswerDisplay();
+  document.getElementById('thinkProgress').style.width = '100%';
+  document.getElementById('answerProgress').style.width = '100%';
+  document.getElementById('thinkStatus').textContent = '';
+  document.getElementById('answerStatus').textContent = '';
+  document.getElementById('thinkDisplay').classList.remove('time-warning');
+  document.getElementById('answerDisplay').classList.remove('time-warning');
+}
+
+function fmtTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function updateThinkDisplay() { document.getElementById('thinkDisplay').textContent = fmtTime(thinkSec); }
+function updateAnswerDisplay() { document.getElementById('answerDisplay').textContent = fmtTime(answerSec); }
+
+function startThink() {
+  stopAllTimers();
+  thinkSec = 240;
+  updateThinkDisplay();
+  document.getElementById('thinkProgress').style.width = '100%';
+  document.getElementById('thinkStatus').textContent = 'Жүріп жатыр...';
+  document.getElementById('answerStatus').textContent = '';
+
+  thinkInterval = setInterval(() => {
+    thinkSec--;
+    updateThinkDisplay();
+    document.getElementById('thinkProgress').style.width = (thinkSec / 240 * 100) + '%';
+    if (thinkSec <= 30) {
+      document.getElementById('thinkDisplay').classList.add('time-warning');
+      document.getElementById('thinkStatus').textContent = '⚠ Уақыт аяқталуда!';
+    }
+    if (thinkSec <= 0) {
+      clearInterval(thinkInterval);
+      document.getElementById('thinkDisplay').textContent = '0:00';
+      document.getElementById('thinkStatus').textContent = '✓ Ойлану уақыты бітті!';
+      document.getElementById('thinkDisplay').classList.remove('time-warning');
+      setTimeout(() => startAnswer(), 800);
+    }
+  }, 1000);
+}
+
+function startAnswer() {
+  clearInterval(thinkInterval);
+  answerSec = 300;
+  updateAnswerDisplay();
+  document.getElementById('answerProgress').style.width = '100%';
+  document.getElementById('answerStatus').textContent = 'Жүріп жатыр...';
+  document.getElementById('thinkStatus').textContent = '';
+
+  answerInterval = setInterval(() => {
+    answerSec--;
+    updateAnswerDisplay();
+    document.getElementById('answerProgress').style.width = (answerSec / 300 * 100) + '%';
+    if (answerSec <= 60) {
+      document.getElementById('answerDisplay').classList.add('time-warning');
+      document.getElementById('answerStatus').textContent = '⚠ 1 минут қалды!';
+    }
+    if (answerSec <= 0) {
+      clearInterval(answerInterval);
+      document.getElementById('answerDisplay').textContent = '0:00';
+      document.getElementById('answerStatus').textContent = '⏱ Уақыт бітті!';
+      document.getElementById('answerDisplay').classList.remove('time-warning');
+    }
+  }, 1000);
+}
+
+function toggleHint() {
+  document.getElementById('hintContent').classList.toggle('open');
+  document.getElementById('hintToggle').classList.toggle('open');
+}
+
+function toggleAnswer() {
+  document.getElementById('answerContent').classList.toggle('open');
+  document.getElementById('answerToggle').classList.toggle('open');
+}
+
+function markDone() {
+  if (currentCase === null) return;
+  completedCases.add(currentCase);
+  document.getElementById(`card-${currentCase}`).classList.add('done');
+  updateProgress();
+  closeModal();
+}
+
+function updateProgress() {
+  const n = completedCases.size;
+  document.getElementById('progressFill').style.width = (n / 6 * 100) + '%';
+  document.getElementById('progressCount').textContent = `${n} / 6`;
+}
+
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+buildGrid();
+</script>
+</body>
+</html>
